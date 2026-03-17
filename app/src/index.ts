@@ -2,6 +2,7 @@ import { Elysia } from "elysia";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { prisma } from "./db";
+import { cors } from '@elysiajs/cors'
 
 const R2_URL =
   "https://38d51e3fbe318c5a9501ab750c094f7e.r2.cloudflarestorage.com";
@@ -19,6 +20,7 @@ const S3 = new S3Client({
 });
 
 const app = new Elysia()
+  .use(cors())
   .get("/get-presigned-url", async () => {
     const path = `random-folder/${Math.random()}.mp4`;
 
@@ -44,7 +46,7 @@ const app = new Elysia()
     return "Video uploaded";
   })
 
-  .listen(3000);
+  .listen(3001);
 
 export type app = typeof app;
 
