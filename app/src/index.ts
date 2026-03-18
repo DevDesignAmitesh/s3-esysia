@@ -4,9 +4,8 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { prisma } from "./db";
 import { cors } from '@elysiajs/cors'
 
-const R2_URL =
-  "https://38d51e3fbe318c5a9501ab750c094f7e.r2.cloudflarestorage.com";
-
+const R2_URL = process.env.R2_URL!;
+const R2_DEV_URL = process.env.R2_DEV_URL!;
 const R2_ACCESS_KEY = process.env.R2_ACCESS_KEY!;
 const R2_SECRET_ACCESS_KEY = process.env.R2_SECRET_ACCESS_KEY!;
 
@@ -33,7 +32,9 @@ const app = new Elysia()
       { expiresIn: 3600 },
     );
 
-    return { putUrl, path };
+    const finalPath = `${path}/${R2_DEV_URL}`
+
+    return { putUrl, path: finalPath };
   })
 
   .post("/upload-final-url", async ({ body }) => {
